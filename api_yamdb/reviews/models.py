@@ -18,5 +18,3 @@ class User(AbstractUser):
         choices=ROLES,
         default=ROLES[0],
     )
-
-
