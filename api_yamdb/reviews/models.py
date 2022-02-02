@@ -13,6 +13,7 @@ ROLES = [
 
 
 class User(AbstractUser):
+    email = models.EmailField(unique=True)
     bio = models.TextField(
         'Биография',
         blank=True,
