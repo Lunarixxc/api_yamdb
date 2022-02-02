@@ -7,3 +7,4 @@ from .serializers import UsersSerializer
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UsersSerializer
+    lookup_field = 'username'

@@ -2,11 +2,11 @@ from email.policy import default
 from importlib.metadata import requires
 
 from rest_framework import serializers
-from reviews.models import ROLES, User
+from reviews.models import ROLES, USER, User
 
 
 class UsersSerializer(serializers.ModelSerializer):
-    role = serializers.ChoiceField(choices=ROLES, default = ROLES[0][0])
+    role = serializers.ChoiceField(choices=ROLES, default = USER)
     email = serializers.EmailField(required=True)
     
     class Meta:

@@ -1,10 +1,14 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+USER = 'user'
+MODER = 'moderator'
+ADMIN = 'admin'
+
 ROLES = [
-    ('user', 'Пользователь'),
-    ('moderator', 'Модератор'),
-    ('admin', 'Админ'),
+    (USER, 'Пользователь'),
+    (MODER, 'Модератор'),
+    (ADMIN, 'Админ'),
 ]
 
 
@@ -16,5 +20,5 @@ class User(AbstractUser):
     role = models.TextField(
         'Роль',
         choices=ROLES,
-        default=ROLES[0][0],
+        default=USER,
     )
