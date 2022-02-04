@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.core.validators import MaxValueValidator
+from django.core.validators import MaxValueValidator, MinLengthValidator
 
 USER = 'user'
 MODER = 'moderator'
@@ -30,8 +30,8 @@ class Review(models.Model):
     text = models.TextField('текст')
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
     score = models.PositiveSmallIntegerField(
-        validators=[MaxValueValidator(10)]
-     )
+        validators=[MinLengthValidator(1), MaxValueValidator(10)]
+    )
 
     author = models.ForeignKey(
         User,
