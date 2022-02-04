@@ -50,6 +50,7 @@ class Review(models.Model):
         on_delete=models.CASCADE,
         related_name='reviews'
     )
+
     def __str__(self):
         return self.text[:15]
 
