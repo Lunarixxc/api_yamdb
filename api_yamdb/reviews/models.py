@@ -1,3 +1,4 @@
+from turtle import title
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.core.validators import MaxValueValidator, MinLengthValidator
@@ -26,6 +27,10 @@ class User(AbstractUser):
     )
 
 
+class Title(models.Model):
+    text = models.TextField('текст')
+
+
 class Review(models.Model):
     text = models.TextField('текст')
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
@@ -40,6 +45,11 @@ class Review(models.Model):
         verbose_name='автор'
     )
 
+    title = models.ForeignKey(
+        Title,
+        on_delete=models.CASCADE,
+        related_name='reviews'
+    )
     def __str__(self):
         return self.text[:15]
 
@@ -51,7 +61,7 @@ class Review(models.Model):
 class Comment(models.Model):
     text = models.TextField('текст комментария')
     pub_date = models.DateTimeField(
-        'Дата добавления', auto_now_add=True)
+        'Дата публикации', auto_now_add=True)
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
