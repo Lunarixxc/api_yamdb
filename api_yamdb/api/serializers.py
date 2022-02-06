@@ -1,6 +1,6 @@
-from rest_framework import serializers
 from django.db.models.aggregates import Avg
-from reviews.models import Review, Comment, Category,  Genre, Title, User
+from rest_framework import serializers
+from reviews.models import Category, Comment, Genre, Review, Title, User
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -29,27 +29,6 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ['id', 'text', 'author', 'pub_date']
         model = Comment
-
-class SignupSerializer(serializers.Serializer):
-    email = serializers.EmailField(required=True)
-    username = serializers.CharField(required=True)
-
-
-class GetTokenSerializer(serializers.Serializer):
-    username = serializers.CharField(required=True)
-    confirmation_code = serializers.CharField(required=True)
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = ('first_name',
-                  'last_name',
-                  'username',
-                  'bio',
-                  'email',
-                  'role'
-                  )
-        model = User
 
 
 class CategorySerializer(serializers.ModelSerializer):
