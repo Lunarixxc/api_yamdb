@@ -30,10 +30,6 @@ class User(AbstractUser):
     )
 
 
-class Title(models.Model):
-    text = models.TextField('текст')
-
-
 class Review(models.Model):
     text = models.TextField('текст')
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
