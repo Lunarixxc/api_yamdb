@@ -1,22 +1,19 @@
 import django_filters
 from django.shortcuts import get_object_or_404
-from reviews.models import Review, Comment, Title, Category, Genre
-from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, viewsets
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from reviews.models import Category, Comment, Genre, Review, Title
 
-from .permissions import IsOwnerOrModeratorOrAdmin, IsAdminOrReadOnly
-
-from .serializers import (
-    CommentSerializer, GenreSerializer,
-    ReviewSerializer, CategorySerializer,
-    TitleSerializer,
-)
 from .mixins import CustomViewSet
+from .permissions import (IsAdminOrReadOnly, IsOnlyAdmin,
+                          IsOwnerOrModeratorOrAdmin)
+from .serializers import (CategorySerializer, CommentSerializer,
+                          GenreSerializer, ReviewSerializer, TitleSerializer)
 
 
 class CategoryViewSet(CustomViewSet):
-    permission_classes = [IsAdminOrReadOnly, ]
+    permission_classes = (IsAuthenticatedOrReadOnly, IsAdminOrReadOnly, )
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     lookup_field = 'slug'
@@ -62,7 +59,7 @@ class TitleViewSet(viewsets.ModelViewSet):
 
 class ReviewViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrModeratorOrAdmin]
+    permission_classes = (IsOwnerOrModeratorOrAdmin, )
 
     def get_queryset(self):
         title_id = get_object_or_404(Title, id=self.kwargs.get("title_id"))

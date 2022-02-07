@@ -32,6 +32,10 @@ class User(AbstractUser):
         default=USER,
     )
 
+    class Meta:
+        ordering = ('email',)
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
 
 class Category(models.Model):
     name = models.CharField('Название категории', max_length=256)
@@ -110,6 +114,7 @@ class Review(models.Model):
     class Meta:
         verbose_name = 'отзыв'
         verbose_name_plural = 'отзывы'
+        ordering = ('pub_date',)
 
 
 class Comment(models.Model):
@@ -135,4 +140,4 @@ class Comment(models.Model):
     class Meta:
         verbose_name = 'комментарий'
         verbose_name_plural = 'комментарии'
-
+        ordering = ('pub_date',)
