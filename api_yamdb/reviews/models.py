@@ -110,6 +110,7 @@ class Review(models.Model):
     class Meta:
         verbose_name = 'отзыв'
         verbose_name_plural = 'отзывы'
+        unique_together = ('author', 'title',)
 
 
 class Comment(models.Model):
