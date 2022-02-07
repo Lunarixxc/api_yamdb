@@ -6,7 +6,6 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -35,7 +34,9 @@ class UserViewSet(viewsets.ModelViewSet):
     def me(self, request):
         me = request.user
         if request.method == 'PATCH':
-            serializer = self.get_serializer(me, data=request.data, partial=True)
+            serializer = self.get_serializer(
+                me, data=request.data, partial=True
+            )
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)

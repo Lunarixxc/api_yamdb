@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
@@ -36,6 +35,7 @@ class User(AbstractUser):
         ordering = ('email',)
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
+
 
 class Category(models.Model):
     name = models.CharField('Название категории', max_length=256)

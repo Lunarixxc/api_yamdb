@@ -13,7 +13,7 @@ class UsersSerializer(serializers.ModelSerializer):
                 "Пользователя с таким названием назвать нельзя!"
             )
         return value
-    
+
     def validate_email(self, value):
         user = User.objects.filter(email=value)
         if user:

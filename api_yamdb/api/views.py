@@ -6,8 +6,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from reviews.models import Category, Comment, Genre, Review, Title
 
 from .mixins import CustomViewSet
-from .permissions import (IsAdminOrReadOnly, IsOnlyAdmin,
-                          IsOwnerOrModeratorOrAdmin)
+from .permissions import IsAdminOrReadOnly, IsOwnerOrModeratorOrAdmin
 from .serializers import (CategorySerializer, CommentSerializer,
                           GenreSerializer, ReviewSerializer, TitleSerializer)
 

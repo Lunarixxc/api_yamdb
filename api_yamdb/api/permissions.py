@@ -1,6 +1,5 @@
 from rest_framework import permissions
 from reviews.models import ADMIN, MODER, USER
-from this import d
 
 
 class IsOwnerOrModeratorOrAdmin(permissions.BasePermission):
@@ -51,8 +50,6 @@ class IsAdminOrReadOnly(permissions.BasePermission):
                 return True
         except AttributeError:
             return False
-
-
 
 
 class IsOnlyAdmin(permissions.BasePermission):
