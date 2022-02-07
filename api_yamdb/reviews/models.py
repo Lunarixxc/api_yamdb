@@ -140,4 +140,5 @@ class Comment(models.Model):
     class Meta:
         verbose_name = 'комментарий'
         verbose_name_plural = 'комментарии'
+        unique_together = ('author', 'title',)
         ordering = ('pub_date',)
