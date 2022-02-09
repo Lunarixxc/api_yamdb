@@ -32,6 +32,18 @@ class User(AbstractUser):
         default=USER,
     )
 
+    @property
+    def is_admin(self):
+        return self.role == ADMIN
+
+    @property
+    def is_moderator(self):
+        return self.role == MODER
+
+    @property
+    def is_user(self):
+        return self.role == USER
+
     class Meta:
         ordering = ('email',)
         verbose_name = 'Пользователь'
@@ -86,7 +98,8 @@ class Title(models.Model):
 
     @property
     def rating(self):
-        return self.reviews.all().aggregate(Avg('score')).get('score__avg', 0.0)
+        return self.reviews.all().aggregate(Avg('score')).get(
+            'score__avg', 0.0)
 
     class Meta:
         ordering = ('name',)

@@ -13,20 +13,20 @@ from .serializers import (CategorySerializer, CommentSerializer,
 
 
 class CategoryViewSet(CustomViewSet):
-    permission_classes = (IsAuthenticatedOrReadOnly, IsAdminOrReadOnly, )
+    permission_classes = (IsAuthenticatedOrReadOnly, IsAdminOrReadOnly)
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     lookup_field = 'slug'
-    filter_backends = (filters.SearchFilter,)
+    filter_backends = (filters.SearchFilter, )
     search_fields = ('=name', )
 
 
 class GenreViewSet(CustomViewSet):
-    permission_classes = [IsAdminOrReadOnly, ]
+    permission_classes = (IsAdminOrReadOnly, )
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     lookup_field = 'slug'
-    filter_backends = [filters.SearchFilter]
+    filter_backends = (filters.SearchFilter, )
     search_fields = ('=name', )
 
 
@@ -51,9 +51,9 @@ class TitleFilter(django_filters.FilterSet):
 
 class TitleViewSet(viewsets.ModelViewSet):
     serializer_class = TitleSerializer
-    permission_classes = [IsAdminOrReadOnly, ]
+    permission_classes = (IsAdminOrReadOnly, )
     queryset = Title.objects.all()
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (DjangoFilterBackend, )
     filterset_class = TitleFilter
 
 
@@ -75,7 +75,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrModeratorOrAdmin]
+    permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrModeratorOrAdmin)
 
     def get_queryset(self):
         review_id = self.kwargs.get("review_id")

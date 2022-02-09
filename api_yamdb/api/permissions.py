@@ -1,7 +1,5 @@
 from rest_framework import permissions
 
-from reviews.models import ADMIN, MODER, USER
-
 
 class IsOwnerOrModeratorOrAdmin(permissions.BasePermission):
     """
@@ -10,30 +8,26 @@ class IsOwnerOrModeratorOrAdmin(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        try:
-            if (
-                request.method in permissions.SAFE_METHODS
-                or request.user.role == USER
-                or request.user.role == ADMIN
-                or request.user.role == MODER
-                or request.user.is_superuser == 1
-            ):
-                return True
-        except AttributeError:
-            return False
+        if (
+            request.method in permissions.SAFE_METHODS
+            or request.user.is_authenticated
+            and (request.user.is_user
+                 or request.user.is_admin
+                 or request.user.is_moderator
+                 or request.user.is_superuser)
+        ):
+            return True
 
     def has_object_permission(self, request, view, obj):
-        try:
-            if (
-                request.method in permissions.SAFE_METHODS
-                or obj.author == request.user
-                or request.user.role == ADMIN
-                or request.user.role == MODER
-                or request.user.is_superuser == 1
-            ):
-                return True
-        except AttributeError:
-            return False
+        if (
+            request.method in permissions.SAFE_METHODS
+            or request.user.is_authenticated
+            and (obj.author == request.user
+                 or request.user.is_admin
+                 or request.user.is_moderator
+                 or request.user.is_superuser)
+        ):
+            return True
 
 
 class IsAdminOrReadOnly(permissions.BasePermission):
@@ -42,15 +36,13 @@ class IsAdminOrReadOnly(permissions.BasePermission):
     or just read objects by anyone(even user without tokens).
     """
     def has_permission(self, request, view):
-        try:
-            if (
-                request.method in permissions.SAFE_METHODS
-                or request.user.role == ADMIN
-                or request.user.is_superuser == 1
-            ):
-                return True
-        except AttributeError:
-            return False
+        if (
+            request.method in permissions.SAFE_METHODS
+            or request.user.is_authenticated
+            and (request.user.is_admin
+                 or request.user.is_superuser)
+        ):
+            return True
 
 
 class IsOnlyAdmin(permissions.BasePermission):
@@ -58,11 +50,9 @@ class IsOnlyAdmin(permissions.BasePermission):
     Permission that allows only administrator to do everything and nobody else.
     """
     def has_permission(self, request, view):
-        try:
-            if (
-                request.user.role == ADMIN
-                or request.user.is_superuser == 1
-            ):
-                return True
-        except AttributeError:
-            return False
+        if (
+            request.user.is_authenticated
+            and (request.user.is_admin
+                 or request.user.is_superuser)
+        ):
+            return True
