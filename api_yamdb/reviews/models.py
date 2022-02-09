@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.db.models.aggregates import Avg
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
@@ -67,6 +68,7 @@ class Title(models.Model):
     name = models.CharField('Название', max_length=200)
     year = models.PositiveSmallIntegerField(
         'Год выпуска',
+        db_index=True,
         validators=(MaxValueValidator(get_year),)
     )
     description = models.TextField('Описание', blank=True, null=True)
@@ -81,6 +83,10 @@ class Title(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def rating(self):
+        return self.reviews.all().aggregate(Avg('score')).get('score__avg', 0.0)
 
     class Meta:
         ordering = ('name',)
@@ -114,8 +120,13 @@ class Review(models.Model):
     class Meta:
         verbose_name = 'отзыв'
         verbose_name_plural = 'отзывы'
-        unique_together = ('author', 'title',)
-        ordering = ('pub_date',)
+        ordering = ('-pub_date',)
+        constraints = [
+            models.UniqueConstraint(
+                fields=['title', 'author'],
+                name='unique_review'
+            )
+        ]
 
 
 class Comment(models.Model):
@@ -141,4 +152,4 @@ class Comment(models.Model):
     class Meta:
         verbose_name = 'комментарий'
         verbose_name_plural = 'комментарии'
-        ordering = ('pub_date',)
+        ordering = ('-pub_date',)
