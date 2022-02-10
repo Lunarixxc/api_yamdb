@@ -12,6 +12,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from reviews.models import User
 from .serializers import (UserEmailSerializer, UserMeSerializer,
                           UsersSerializer, UserTokenSerializer)
+from api_yamdb.settings import EMAIL
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -57,15 +58,15 @@ def get_email_code(request):
         )
     except IntegrityError:
         return Response(
-            {'message': "Данный пользователь уже существует"},
+            {'message': 'Данный пользователь уже существует'},
             status=status.HTTP_400_BAD_REQUEST
         )
     confirmation_code = default_token_generator.make_token(user=user)
-    theme = "Код подтверждения"
+    theme = 'Код подтверждения'
     text = f'Ваш код подтверждения: {confirmation_code}'
     send_mail(
         theme, text,
-        "Yamdb@yandex.ru", [email],
+        EMAIL, [email],
         fail_silently=False,
     )
     return Response(
@@ -86,7 +87,7 @@ def get_jwt_token(request):
     if default_token_generator.check_token(user=user, token=confirmation_code):
         token = RefreshToken.for_user(user)
         return Response(
-            {"token": str(token.access_token)},
+            {'token': str(token.access_token)},
             status=status.HTTP_200_OK
         )
     return Response(

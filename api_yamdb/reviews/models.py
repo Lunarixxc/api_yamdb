@@ -45,31 +45,34 @@ class User(AbstractUser):
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
 
+    def __str__(self):
+        return self.username
+
 
 class Category(models.Model):
     name = models.CharField('Название категории', max_length=256)
     slug = models.SlugField('Слаг', unique=True)
-
-    def __str__(self):
-        return self.name
 
     class Meta:
         ordering = ('name',)
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
 
+    def __str__(self):
+        return self.name
+
 
 class Genre(models.Model):
     name = models.CharField('Название жанра', max_length=256)
     slug = models.SlugField('Слаг', unique=True)
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         ordering = ('name',)
         verbose_name = 'Жанр'
         verbose_name_plural = 'Жанры'
+
+    def __str__(self):
+        return self.name
 
 
 class Title(models.Model):
@@ -89,9 +92,6 @@ class Title(models.Model):
         null=True
     )
 
-    def __str__(self):
-        return self.name
-
     @property
     def rating(self):
         return self.reviews.all().aggregate(Avg('score')).get(
@@ -101,6 +101,9 @@ class Title(models.Model):
         ordering = ('name',)
         verbose_name = 'Произведение'
         verbose_name_plural = 'Произведения'
+
+    def __str__(self):
+        return self.name
 
 
 class Review(models.Model):
@@ -123,9 +126,6 @@ class Review(models.Model):
         related_name='reviews'
     )
 
-    def __str__(self):
-        return self.text[:15]
-
     class Meta:
         verbose_name = 'отзыв'
         verbose_name_plural = 'отзывы'
@@ -136,6 +136,9 @@ class Review(models.Model):
                 name='unique_review'
             )
         ]
+
+    def __str__(self):
+        return self.text[:15]
 
 
 class Comment(models.Model):
@@ -155,10 +158,10 @@ class Comment(models.Model):
         verbose_name='отзыв'
     )
 
-    def __str__(self):
-        return self.text[:15]
-
     class Meta:
         verbose_name = 'комментарий'
         verbose_name_plural = 'комментарии'
         ordering = ('-pub_date',)
+
+    def __str__(self):
+        return self.text[:15]
