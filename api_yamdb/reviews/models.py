@@ -16,10 +16,6 @@ ROLES = [
 ]
 
 
-def get_year():
-    return datetime.now().year
-
-
 class User(AbstractUser):
     email = models.EmailField(unique=True)
     bio = models.TextField(
@@ -81,7 +77,7 @@ class Title(models.Model):
     year = models.PositiveSmallIntegerField(
         'Год выпуска',
         db_index=True,
-        validators=(MaxValueValidator(get_year),)
+        validators=(MaxValueValidator(datetime.now().year),)
     )
     description = models.TextField('Описание', blank=True, null=True)
     genre = models.ManyToManyField(Genre, 'Жанр', blank=True)

@@ -5,11 +5,11 @@ from rest_framework import filters, viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from reviews.models import Category, Comment, Genre, Review, Title
-
 from .mixins import CustomViewSet
 from .permissions import IsAdminOrReadOnly, IsOwnerOrModeratorOrAdmin
 from .serializers import (CategorySerializer, CommentSerializer,
-                          GenreSerializer, ReviewSerializer, TitleSerializer)
+                          GenreSerializer, ReviewSerializer, TitleSerializer,
+                          TitleSerializerToRead)
 
 
 class CategoryViewSet(CustomViewSet):
@@ -50,11 +50,15 @@ class TitleFilter(django_filters.FilterSet):
 
 
 class TitleViewSet(viewsets.ModelViewSet):
-    serializer_class = TitleSerializer
     permission_classes = (IsAdminOrReadOnly, )
     queryset = Title.objects.all()
     filter_backends = (DjangoFilterBackend, )
     filterset_class = TitleFilter
+
+    def get_serializer_class(self):
+        if self.action in ('create', 'update', 'partial_update'):
+            return TitleSerializer
+        return TitleSerializerToRead
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
