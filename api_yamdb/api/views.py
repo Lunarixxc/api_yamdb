@@ -1,9 +1,9 @@
-import django_filters
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
+from .filters import TitlesFilter
 from reviews.models import Category, Comment, Genre, Review, Title
 from .mixins import CustomViewSet
 from .permissions import IsAdminOrReadOnly, IsOwnerOrModeratorOrAdmin
@@ -30,30 +30,11 @@ class GenreViewSet(CustomViewSet):
     search_fields = ('=name', )
 
 
-class TitleFilter(django_filters.FilterSet):
-    name = django_filters.CharFilter(
-        field_name='name',
-        lookup_expr='contains'
-    )
-    category = django_filters.CharFilter(
-        field_name='category__slug',
-        lookup_expr='exact'
-    )
-    genre = django_filters.CharFilter(
-        field_name='genre__slug',
-        lookup_expr='exact'
-    )
-
-    class Meta:
-        model = Title
-        fields = ['name', 'category', 'genre', 'year']
-
-
 class TitleViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminOrReadOnly, )
     queryset = Title.objects.all()
     filter_backends = (DjangoFilterBackend, )
-    filterset_class = TitleFilter
+    filterset_class = TitlesFilter
 
     def get_serializer_class(self):
         if self.action in ('create', 'update', 'partial_update'):
